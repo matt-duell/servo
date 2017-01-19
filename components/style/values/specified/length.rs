@@ -428,6 +428,18 @@ impl Length {
     pub fn parse_dimension(value: CSSFloat, unit: &str) -> Result<Length, ()> {
         NoCalcLength::parse_dimension(value, unit).map(Length::NoCalc)
     }
+    /// https://drafts.csswg.org/css-fonts-3/#font-size-prop
+    pub fn from_font_size_int(i: u8) -> Length {
+        match i {
+            0 | 1 => Length::Absolute(Au::from_px(FONT_MEDIUM_PX) * 3 / 4),
+            2 => Length::Absolute(Au::from_px(FONT_MEDIUM_PX) * 8 / 9),
+            3 => Length::Absolute(Au::from_px(FONT_MEDIUM_PX)),
+            4 => Length::Absolute(Au::from_px(FONT_MEDIUM_PX) * 6 / 5),
+            5 => Length::Absolute(Au::from_px(FONT_MEDIUM_PX) * 3 / 2),
+            6 => Length::Absolute(Au::from_px(FONT_MEDIUM_PX) * 2),
+            _ => Length::Absolute(Au::from_px(FONT_MEDIUM_PX) * 3),
+        }
+    }
 
     #[inline]
     fn parse_internal(input: &mut Parser, context: AllowedNumericType) -> Result<Length, ()> {
